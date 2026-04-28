@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 850px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "#1a1a1a"}, "group": "Organization", "id": "Luna Foundation Guard", "label": "Luna Foundation Guard", "shape": "dot", "size": 75, "title": "Luna Foundation Guard\nType: Organization"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "BTC reserve", "label": "BTC reserve", "shape": "dot", "size": 75, "title": "BTC reserve\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Person", "id": "Do Kwon", "label": "Do Kwon", "shape": "dot", "size": 35, "title": "Do Kwon\nType: Person"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "critics", "label": "critics", "shape": "dot", "size": 35, "title": "critics\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Organization", "id": "Anchor Protocol", "label": "Anchor Protocol", "shape": "dot", "size": 45, "title": "Anchor Protocol\nType: Organization"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "reserve fund", "label": "reserve fund", "shape": "dot", "size": 35, "title": "reserve fund\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "TVL", "label": "TVL", "shape": "dot", "size": 25, "title": "TVL\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Currency", "id": "Luna", "label": "Luna", "shape": "dot", "size": 45, "title": "Luna\nType: Currency"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "price", "label": "price", "shape": "dot", "size": 35, "title": "price\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "market cap", "label": "market cap", "shape": "dot", "size": 35, "title": "market cap\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Organization", "id": "Ethereum", "label": "Ethereum", "shape": "dot", "size": 25, "title": "Ethereum\nType: Organization"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "founders", "label": "founders", "shape": "dot", "size": 35, "title": "founders\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Currency", "id": "Bitcoin", "label": "Bitcoin", "shape": "dot", "size": 35, "title": "Bitcoin\nType: Currency"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "reserve plan", "label": "reserve plan", "shape": "dot", "size": 25, "title": "reserve plan\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Organization", "id": "BitConnect", "label": "BitConnect", "shape": "dot", "size": 25, "title": "BitConnect\nType: Organization"}, {"font": {"color": "#1a1a1a"}, "group": "Unknown", "id": "crypto collapse", "label": "crypto collapse", "shape": "dot", "size": 45, "title": "crypto collapse\nType: Unknown"}, {"font": {"color": "#1a1a1a"}, "group": "Organization", "id": "OneCoin", "label": "OneCoin", "shape": "dot", "size": 25, "title": "OneCoin\nType: Organization"}, {"font": {"color": "#1a1a1a"}, "group": "Organization", "id": "Iron Finance", "label": "Iron Finance", "shape": "dot", "size": 25, "title": "Iron Finance\nType: Organization"}, {"font": {"color": "#1a1a1a"}, "group": "Currency", "id": "UST", "label": "UST", "shape": "dot", "size": 25, "title": "UST\nType: Currency"}]);
+                  edges = new vis.DataSet([{"from": "Luna Foundation Guard", "label": "has $3B in BTC to defend peg", "title": "has $3B in BTC to defend peg", "to": "BTC reserve", "width": 6}, {"from": "Do Kwon", "label": "called \u0027poor\u0027", "title": "called \u0027poor\u0027", "to": "critics", "width": 2}, {"from": "Anchor Protocol", "label": "dropped from $450M to $280M", "title": "dropped from $450M to $280M", "to": "reserve fund", "width": 2}, {"from": "Anchor Protocol", "label": "is $16B", "title": "is $16B", "to": "TVL", "width": 1}, {"from": "Luna", "label": "down 15% in last hour", "title": "down 15% in last hour", "to": "price", "width": 2}, {"from": "Luna", "label": "giving ~$40B", "title": "giving ~$40B", "to": "market cap", "width": 1}, {"from": "Ethereum", "label": "historically handled technical criticism", "title": "historically handled technical criticism", "to": "founders", "width": 1}, {"from": "founders", "label": "historically handled technical criticism", "title": "historically handled technical criticism", "to": "Bitcoin", "width": 1}, {"from": "Bitcoin", "label": "in progress", "title": "in progress", "to": "reserve plan", "width": 1}, {"from": "BitConnect", "label": "documented in major crypto collapse", "title": "documented in major crypto collapse", "to": "crypto collapse", "width": 1}, {"from": "crypto collapse", "label": "documented in major crypto collapse", "title": "documented in major crypto collapse", "to": "OneCoin", "width": 1}, {"from": "crypto collapse", "label": "documented in major crypto collapse", "title": "documented in major crypto collapse", "to": "Iron Finance", "width": 1}, {"from": "market cap", "label": "is $17B", "title": "is $17B", "to": "UST", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"physics": {"enabled": true, "barnesHut": {"gravitationalConstant": -26000, "centralGravity": 0.25, "springLength": 200, "springConstant": 0.02, "damping": 0.5}, "maxVelocity": 50, "solver": "barnesHut", "timestep": 0.5, "minVelocity": 0.75, "adaptiveTimestep": true}, "nodes": {"font": {"size": 20, "face": "Arial,sans-serif", "color": "#1a1a1a", "strokeWidth": 2, "strokeColor": "#ffffff"}, "borderWidth": 3, "borderWidthSelected": 4, "shadow": {"enabled": true, "color": "rgba(0,0,0,0.25)", "size": 12, "x": 5, "y": 5}, "shapeProperties": {"borderRadius": 8}}, "edges": {"color": {"color": "#888888", "highlight": "#1976d2", "opacity": 0.7}, "font": {"size": 16, "face": "Arial,sans-serif", "color": "#1a1a1a", "strokeWidth": 2, "strokeColor": "#ffffff", "bold": {"color": "#000000", "size": 18}}, "smooth": {"enabled": true, "type": "cubicBezier", "forceDirection": "none"}, "shadow": {"enabled": true, "color": "rgba(0,0,0,0.1)", "size": 8, "x": 3, "y": 3}, "width": 2, "widthSelectionMultiplier": 2}, "interaction": {"navigationButtons": true, "keyboard": true, "zoomView": true, "dragView": true, "hover": true, "tooltipDelay": 100, "hideEdgesOnDrag": false}, "layout": {"randomSeed": 42}};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
