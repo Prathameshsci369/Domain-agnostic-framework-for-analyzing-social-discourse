@@ -1,0 +1,8 @@
+streamlit
+neo4j
+networkx
+pyvis
+tiktoken
+llama-cpp-python
+praw
+python-dotenv
